@@ -1,0 +1,33 @@
+name: Laravel CI
+
+on: [push]
+
+jobs:
+    laravel-test:
+        runs-on: ubuntu-latest
+
+        services:
+            mysql:
+                image: mysql:8.0
+                env:
+                    MYSQL_ROOT_PASSWORD: root
+                    MYSQL_DATABASE: laravel
+                ports:
+                    - 3306:3306
+                options: >-
+                    --health-cmd="mysqladmin ping --silent"
+                    --health-interval=10s
+                    --health-timeout=5s
+                    --health-retries=3
+        steps:
+            - name: Checkout Code
+              uses: actions/checkout@v6.0.0
+
+            - name: Setup PHP
+              uses: shivammathur/setup-php@v2
+              with:
+                php-version: '8.5'
+                extensions: mbstring, bcmath, mysqli, pdo, pdo_mysql
+                
+            - name: Install Composer Dependencies
+              run: composer install --prefer-dist --no-progress --no-suggest --no-interaction
