@@ -29,14 +29,26 @@ jobs:
                 php-version: '8.4'
                 extensions: mbstring, bcmath, mysqli, pdo, pdo_mysql
                 
-            - name: Install Composer Dependencies
-              run: composer install --prefer-dist --no-progress --no-suggest --no-interaction
+            - name: Setup Node
+              uses: actions/setup-node@v4
+              with:
+                node-version: '22'
+                cache: 'npm'
             
-            - name: Set app
+            - name: Install Node Dependencies
+              run: npm ci
+
+            - name: Install Dependencies
+              run: composer install --no-interaction --prefer-dist --optimize-autoloader
+
+            - name: Copy Environment File
               run: cp .env.example .env
 
-            - name: Set Key
+            - name: Generate Application Key
               run: php artisan key:generate
-            
-            - name: Run tests
-              run: vendor/bin/phpunit
+
+            - name: Build Assets
+              run: npm run build
+
+            - name: Tests
+              run: ./vendor/bin/phpunit
