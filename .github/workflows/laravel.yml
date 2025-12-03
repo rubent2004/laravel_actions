@@ -51,4 +51,11 @@ jobs:
               run: npm run build
 
             - name: Tests
+              id: test
               run: ./vendor/bin/phpunit
+            
+            - name: deploy
+              if: steps.test.outcome == 'success'
+              run: | 
+                echo "Deploying application..."
+                ls
