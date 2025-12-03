@@ -61,7 +61,7 @@ jobs:
                 ls
             
             - name: Artifact
-              uses: actions/upload-artifact@v3
+              uses: actions/upload-artifact@v4
               with:
                 name: artifacts
                 path: composer.json
