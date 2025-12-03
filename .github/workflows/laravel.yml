@@ -31,3 +31,12 @@ jobs:
                 
             - name: Install Composer Dependencies
               run: composer install --prefer-dist --no-progress --no-suggest --no-interaction
+            
+            - name: Set app
+              run: cp .env.example .env
+
+            - name: Set Key
+              run: php artisan key:generate
+            
+            - name: Run tests
+              run: vendor/bin/phpunit
